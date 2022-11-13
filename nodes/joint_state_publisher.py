@@ -152,7 +152,10 @@ class JointStatePublisher(Thread):
                 elif self.pololu_joint_names is not None:
                     self.joint_state.position = self.pololu_joint_positions
                 # Add PAU positions
-                self.joint_state.position = self.pau_joint_positions
+                # TODO: check if it is expected that sometimes we can have no 'pau_joint_positions' set.
+                #  if we expect pau_joint_positions to be always set, throw an error (just do nothin here)
+                if hasattr(self, 'pau_joint_positions'):
+                    self.joint_state.position = self.pau_joint_positions
 
                 # Publish JointState messags
                 self.joint_state_pub.publish(self.joint_state)
